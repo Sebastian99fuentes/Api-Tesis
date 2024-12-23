@@ -54,10 +54,14 @@ namespace api.Controllers
              if (!ModelState.IsValid)
                  return BadRequest(ModelState); 
 
-                 var activeReservationsCount = await _reservaAreaRepository.CountActiveReservationsByUserAsync(reservaDto.UserId);
-                  if (activeReservationsCount >= 3)
-                          return BadRequest("El usuario ya tiene el máximo de 3 reservas activas");
 
+              if (reservaDto.UserId != Guid.Parse("11111111-1111-1111-1111-111111111111"))
+                 {
+                     var activeReservationsCount = await _reservaAreaRepository.CountActiveReservationsByUserAsync(reservaDto.UserId);
+                       if (activeReservationsCount >= 3)
+                          return BadRequest("El usuario ya tiene el máximo de 3 reservas activas");
+                }
+            
             
                 var ReservareaModel = reservaDto.ToReservatFromCreate();
                 await _reservaAreaRepository.CreateAsync(ReservareaModel);

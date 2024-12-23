@@ -14,7 +14,5 @@ namespace api.Data.Models
         public string NombreImple { get; set; } = string.Empty;
 
         public int Cantidad { get; set; }
-
-        public List<Comments> Comments = new List<Comments>();
     }
 }

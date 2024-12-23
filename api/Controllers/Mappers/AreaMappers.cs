@@ -30,7 +30,6 @@ namespace api.Controllers.Mappers
                 Nombre = AreaModel.Nombre,
                 Ubicacion = AreaModel.Ubicacion,
                 Descripcion = AreaModel.Descripcion,
-                Comments = AreaModel.Comments.Select(c => c.ToCommentDto()).ToList()
 
             };
         } 

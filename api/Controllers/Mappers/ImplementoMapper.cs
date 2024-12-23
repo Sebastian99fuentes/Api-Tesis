@@ -26,7 +26,7 @@ namespace api.Controllers.Mappers
                 Id = implementoModel.Id,
                 NombreImple = implementoModel.NombreImple,
                 Cantidad = implementoModel.Cantidad,
-                Comments = implementoModel.Comments.Select(c => c.ToCommentDto()).ToList()
+               
             };
         }
 

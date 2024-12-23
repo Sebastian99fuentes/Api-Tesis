@@ -369,3 +369,4 @@ C:\Users\sebas\Documents\Tesis\tesis\ProgramaTesis\api\obj\Debug\net8.0\refint\a
 C:\Users\sebas\Documents\Tesis\tesis\ProgramaTesis\api\obj\Debug\net8.0\api.pdb
 C:\Users\sebas\Documents\Tesis\tesis\ProgramaTesis\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 C:\Users\sebas\Documents\Tesis\tesis\ProgramaTesis\api\obj\Debug\net8.0\ref\api.dll
+C:\Users\sebas\Documents\Tesis\tesis\ProgramaTesis\api\obj\Debug\net8.0\api.sourcelink.json

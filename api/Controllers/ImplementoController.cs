@@ -20,10 +20,12 @@ namespace api.Controllers
     public class ImplementoController : ControllerBase
     {
         private readonly  IImplementosRepository _implementoRepository;
+         private readonly  IReservasImplementosRepository _reservasImplementos;
 
-        public ImplementoController(IImplementosRepository implementosRepository)
+        public ImplementoController(IImplementosRepository implementosRepository, IReservasImplementosRepository reservasImplementos )
         {
              _implementoRepository = implementosRepository;
+             _reservasImplementos = reservasImplementos;
         }
 
         [HttpGet ("GetAll-implemento")]
@@ -102,6 +104,12 @@ namespace api.Controllers
 
         public async Task<IActionResult> Delete ([FromRoute] Guid id)
         {
+
+            var response = await _reservasImplementos.CountActiveReservationsByUserAsync(id);
+                 if(response != 0)
+            {
+                return BadRequest("Implemento tiene reservas activas no se puede eliminar ");
+            }
             var implemento = await _implementoRepository.DeleteAsync(id);
 
             if(implemento == null)

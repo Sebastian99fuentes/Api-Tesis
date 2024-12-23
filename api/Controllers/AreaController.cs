@@ -7,6 +7,7 @@ using api.Controllers.Helpers;
 using api.Controllers.Mappers;
 using api.Data;
 using api.Interfaces;
+using api.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,22 +20,18 @@ namespace api.Controllers
     {
         // private readonly ApplicationDBContext _context;
          private readonly IAreaRepository _areaRepository;
-
-         private readonly IReservasRepository _IReservaRepository;
-        public AreaController(  IAreaRepository areaRepository, IReservasRepository IReservaRepository)
+         private readonly IReservaAreaRepository _IReservaAreaRepository;
+        public AreaController(  IAreaRepository areaRepository, IReservaAreaRepository reservaAreaRepository)
         {
             _areaRepository = areaRepository;
-            _IReservaRepository = IReservaRepository;
+            _IReservaAreaRepository = reservaAreaRepository;
         }
 
       
         [HttpGet ("GetAll-areas")]
-        // [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> GetAll( [FromQuery] QueryObject query)
         {
-            // está recuperando una lista de todas las áreas desde la base de datos
-            // (_context.Area.ToList()) y luego transforma cada objeto de tipo Area en su correspondiente DTO
-            // (AreaDto) usando el método ToAreaDto(). El resultado final es una colección de objetos AreaDto. 
 
             var areas = await _areaRepository.GetAllAsync(query);
 
@@ -94,11 +91,11 @@ namespace api.Controllers
          public async Task<IActionResult> Delete ([FromRoute] Guid id)
          {
 
-            // var isAssignedToReservation = await _IReservaRepository.CountActiveReservationsByUserAsync(id);
-            //  if (isAssignedToReservation)
-            // {
-            //   return BadRequest("No se puede eliminar, ya que está asignado a una reserva activa.");
-            // }
+            var isAssignedToReservation = await _IReservaAreaRepository.CountActiveReservationsByUserAsync(id);
+             if (isAssignedToReservation != 0)
+            {
+              return BadRequest("No se puede eliminar, ya que está asignado a una reserva activa.");
+            }
             var area = await _areaRepository.DeleteAsync(id);
 
             if(area == null)

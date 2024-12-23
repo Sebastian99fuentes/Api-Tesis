@@ -72,7 +72,7 @@ namespace api.Repository
 
         public async Task<Implemento?> GetByIdAsync(Guid id)
         {
-           return await _context.Implemento.Include(c=>c.Comments).AsQueryable().FirstOrDefaultAsync(x => x.Id== id);
+           return await _context.Implemento.AsQueryable().FirstOrDefaultAsync(x => x.Id== id);
         }
 
         public Task<bool> Exist(Guid id)

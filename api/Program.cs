@@ -112,10 +112,7 @@ builder.Services.AddAuthentication(Options =>{
 
 builder.Services.AddScoped<ItokenService,  TokenService>();
 builder.Services.AddScoped<IAreaRepository, AreaRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IImplementosRepository, ImplementoRepository>();
-builder.Services.AddScoped<IHorarioRepository, HorarioRepository>();
-builder.Services.AddScoped<IReservasRepository, ReservaRepository>();
 builder.Services.AddScoped<IReservaAreaRepository, ReservaAreaRepository>();
 builder.Services.AddScoped<IReservasImplementosRepository, ReservasImplementosRepository>();
 var app = builder.Build();

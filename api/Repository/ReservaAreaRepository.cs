@@ -59,8 +59,8 @@ namespace api.Repository
 
            public async Task<int> CountActiveReservationsByUserAsync(Guid usuarioId)
         {
-             return await _context.ReservaAreas
-            .CountAsync(r => r.AppUserId == usuarioId);
+                  
+             return await _context.ReservaAreas.CountAsync(r => r.AppUserId == usuarioId);
         }
 
         public async Task<List<ReservaAreas>> GetAllByUserAsync(Guid Id)

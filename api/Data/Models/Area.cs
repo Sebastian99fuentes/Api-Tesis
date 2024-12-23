@@ -16,6 +16,5 @@ namespace api.Models
         public string Ubicacion { get; set; }  = string.Empty;       // Ubicación del espacio 
         public string Descripcion { get; set; } = string.Empty;     // Descripción adicional
 
-        public List<Comments> Comments {get; set; } = new List<Comments>();  // Lista de comentarios
     }
 }

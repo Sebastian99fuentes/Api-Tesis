@@ -73,7 +73,7 @@ namespace api.Repository
 
         public async Task<Area?> GetByIdAsync(Guid id)
         {
-           return await _context.Area.Include(c=>c.Comments).FirstOrDefaultAsync(x => x.Id== id);
+           return await _context.Area.FirstOrDefaultAsync(x => x.Id== id);
         }
 
         public async Task<Area?> UpdateAsync(Guid id, CreateAreaRequestDto areaDto)

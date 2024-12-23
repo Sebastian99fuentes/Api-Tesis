@@ -20,13 +20,8 @@ namespace api.Data
         }
         
         public DbSet<Area> Area {get; set; }
-        public DbSet<Comments> Comments {get; set; } 
 
         public DbSet<Implemento> Implemento {get; set; } 
-
-        public DbSet<Horario> Horario {get; set; }
-
-        public DbSet<Reserva> Reserva {get; set;}
 
         public DbSet<ReservaAreas> ReservaAreas {get; set;}
 
@@ -34,17 +29,6 @@ namespace api.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-                builder.Entity<Comments>()
-        .HasOne(c => c.Area)
-        .WithMany(a => a.Comments)
-        .HasForeignKey(c => c.AreaId)
-        .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Comments>()
-        .HasOne(c => c.Implemento)
-        .WithMany(i => i.Comments)
-        .HasForeignKey(c => c.ImplementoId)
-        .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
 
@@ -67,7 +51,7 @@ namespace api.Data
             var hasher = new PasswordHasher<AppUser>();
             var adminUser = new AppUser
             {
-                Id = "1", // ID único
+                Id = "11111111-1111-1111-1111-111111111111", // ID único
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
                 Email = "admin@example.com",
@@ -85,17 +69,10 @@ namespace api.Data
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {
-                    UserId = "1",
+                    UserId = "11111111-1111-1111-1111-111111111111",
                     RoleId = "1" // Admin Role
                 }
             );
-   // Configuración para almacenar CreatedOn como UTC
-            builder.Entity<Comments>()
-                .Property(c => c.CreatedOn)
-                .HasConversion(
-                    v => v.ToUniversalTime(), // Almacena en UTC
-                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc) // Devuelve en UTC
-                );
 
 
         }
