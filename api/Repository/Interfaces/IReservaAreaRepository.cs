@@ -24,6 +24,5 @@ namespace api.Repository.Interfaces
 
               Task<int> CountActiveReservationsByUserAsync(Guid usuarioId);
 
-              
     }
 }

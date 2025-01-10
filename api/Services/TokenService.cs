@@ -12,22 +12,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace api.Services
 {
+  
     public class TokenService :ItokenService
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
-          private readonly UserManager<AppUser> _userManager;
         public TokenService(IConfiguration config)
         {
-            
-            _config = config; 
-            var signingKey = _config["JWT:SigningKey"];
-            if (string.IsNullOrWhiteSpace(signingKey))
-          {
-             throw new ArgumentNullException("JWT:SigningKey", "La clave JWT no puede ser nula o vacía.");
-          }
-
-          _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
+            _config = config;
+              var signingKey = Environment.GetEnvironmentVariable("Signing_Key");
+           if (string.IsNullOrEmpty(signingKey))
+           {
+              throw new InvalidOperationException("JWT signing key is not set.");
+           }
+             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
         }
 
        public string CreateToken(AppUser user)
@@ -49,7 +47,7 @@ namespace api.Services
                Expires = DateTime.Now.AddDays(7),
                Issuer = _config["JWT:Issuer"],
                Audience = _config["JWT:Audience"],
-               SigningCredentials = creds // Asegúrate de agregar esta línea
+               SigningCredentials = creds 
           };
 
             var tokenHandler = new JwtSecurityTokenHandler();

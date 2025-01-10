@@ -22,7 +22,7 @@ dotnet ef migrations add InitialCreate
 Microsoft.Extensions.Identity.Core  version '8.0.8' 
 Microsoft.AspNetCore.Identity.EntityFrameworkCore  version '8.0.8'
 Microsoft.AspNetCore.Authentication.JwtBearer  version '8.0.8' 
-
+DotNetEnv
 Formato de Fecha es UTC ISO 8601  
 
 Verificación
@@ -36,3 +36,8 @@ Login:
 Inicia sesión con:
 Usuario: admin
 Contraseña: AdminPassword123!
+
+Recuerda que tiene un archivo .env 
+
+Signing_Key="Tu Signing_Key" 
+Default_Conection="Tu Default_Conection"

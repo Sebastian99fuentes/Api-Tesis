@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Controllers.Dtos.ReservaArea;
 using api.Controllers.Mappers;
 using api.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -21,8 +22,10 @@ namespace api.Controllers
         }
 
          [HttpGet("all-reservaArea/{id:guid}")]
+          [Authorize]
         public async Task<IActionResult> GetAll([FromRoute] Guid id)
         {
+        
             var reserva = await _reservaAreaRepository.GetAllAsync(id);
 
             if(reserva == null)
@@ -35,6 +38,7 @@ namespace api.Controllers
         } 
 
          [HttpGet("all-reservaAreaUser/{id:guid}")]
+          [Authorize]
         public async Task<IActionResult> GetAllByUser([FromRoute] Guid id)
         {
             var reserva = await _reservaAreaRepository.GetAllByUserAsync(id);
@@ -48,9 +52,10 @@ namespace api.Controllers
         } 
 
          [HttpPost ("Create-reservaArea")]
+          [Authorize]
         public async Task<IActionResult> Create(CreateReservaAreaRequestDto reservaDto)
         {
-
+           
              if (!ModelState.IsValid)
                  return BadRequest(ModelState); 
 
@@ -70,6 +75,7 @@ namespace api.Controllers
         } 
 
          [HttpGet("GetById-reservaArea/{Id:guid}")]
+          [Authorize]
         public async Task<IActionResult> GetById([FromRoute] Guid Id)
         {
             var reserva = await _reservaAreaRepository.GetByIdAsync(Id);
@@ -84,6 +90,7 @@ namespace api.Controllers
         }
 
         [HttpDelete]
+         [Authorize]
         [Route("delete-reservaArea/{id:guid}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

@@ -29,7 +29,7 @@ namespace api.Controllers
 
       
         [HttpGet ("GetAll-areas")]
-        //  [Authorize]
+         [Authorize]
         public async Task<IActionResult> GetAll( [FromQuery] QueryObject query)
         {
 
@@ -41,6 +41,8 @@ namespace api.Controllers
         }
 
          [HttpGet("GetById-areas{id:guid}")]
+          [Authorize]
+
          public async Task<IActionResult> GetById([FromRoute] Guid id)
          {
             var area = await _areaRepository.GetByIdAsync(id);
@@ -54,6 +56,8 @@ namespace api.Controllers
          } 
 
         [HttpPost("create-area")]
+         [Authorize]
+
          public  async Task<IActionResult> Create ([FromBody] CreateAreaRequestDto AreaDto)
          {
             
@@ -67,6 +71,7 @@ namespace api.Controllers
          }
 
          [HttpPut]
+          [Authorize]
          [Route("Update-areas/{id:guid}")]
            public  async Task<IActionResult> Update ([FromRoute] Guid id, [FromBody] CreateAreaRequestDto Area)
          {
@@ -87,6 +92,7 @@ namespace api.Controllers
          }
 
           [HttpDelete]
+           [Authorize]
          [Route("Delete-areas/{id:guid}")]
          public async Task<IActionResult> Delete ([FromRoute] Guid id)
          {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Controllers.Dtos.ReservaImplemento;
 using api.Controllers.Mappers;
 using api.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -19,6 +20,7 @@ namespace api.Controllers
             _reservaImplementoRepository = reservaImplementoRepository;
         }
           [HttpGet("all-reservaImplemento/{id:guid}")]
+           [Authorize]
         public async Task<IActionResult> GetAll([FromRoute] Guid id)
         {
             var reserva = await _reservaImplementoRepository.GetAllAsync(id);
@@ -33,6 +35,7 @@ namespace api.Controllers
         } 
 
          [HttpGet("all-reservaImplementoUser/{id:guid}")]
+          [Authorize]
         public async Task<IActionResult> GetAllByUser([FromRoute] Guid id)
         {
             var reserva = await _reservaImplementoRepository.GetAllByUserAsync(id);
@@ -46,6 +49,7 @@ namespace api.Controllers
         } 
 
       [HttpPost ("Create-reservaImplemento")]
+       [Authorize]
         public async Task<IActionResult> Create(CreateReservaImplementoRequestDto reservaDto)
         {
 
@@ -67,6 +71,7 @@ namespace api.Controllers
         } 
 
           [HttpGet("GetById-reservaImplemento/{Id:guid}")]
+           [Authorize]
         public async Task<IActionResult> GetById([FromRoute] Guid Id)
         {
             var reserva = await _reservaImplementoRepository.GetByIdAsync(Id);
@@ -81,6 +86,7 @@ namespace api.Controllers
         }
 
          [HttpDelete]
+          [Authorize]
         [Route("delete-reservaImplemento/{id:guid}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

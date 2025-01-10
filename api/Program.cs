@@ -4,32 +4,35 @@ using api.Interfaces;
 using api.Repository;
 using api.Repository.Interfaces;
 using api.Services;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-var builder = WebApplication.CreateBuilder(args);
 
-// Habilitar CORS para cualquier origen
-builder.Services.AddCors(options =>
+Env.Load(".env");  // Si el archivo está dentro de la carpeta 'api'
+// Verificar que la clave de firma se cargue correctamente
+var signingKey = Environment.GetEnvironmentVariable("Signing_Key");
+if (string.IsNullOrEmpty(signingKey))
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin() // Permite cualquier origen
-              .AllowAnyHeader() // Permite cualquier encabezado
-              .AllowAnyMethod(); // Permite cualquier método HTTP (GET, POST, etc.)
-    });
-});
+    throw new InvalidOperationException("Signing key is not set in the environment variables.");
+}
 
+// Verificar también la conexión por si la variable está vacía
+var defaultConnection = Environment.GetEnvironmentVariable("Default_Conection");
+if (string.IsNullOrEmpty(defaultConnection))
+{
+    throw new InvalidOperationException("Default connection string is not set in the environment variables.");
+}
 
+var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -65,7 +68,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options => {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));  
+    options.UseNpgsql(defaultConnection);  
 });
 
 
@@ -87,25 +90,19 @@ builder.Services.AddAuthentication(Options =>{
     Options.DefaultSignInScheme =
     Options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
 
-}).AddJwtBearer(Options => {
-
-      var signingKey = builder.Configuration["JWT:SigningKey"];
-    if (string.IsNullOrWhiteSpace(signingKey))
-    {
-        throw new ArgumentNullException("JWT:SigningKey", "La clave JWT no puede ser nula o vacía.");
-    }
-
-    Options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = builder.Configuration ["JWT:Issuer"],
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(signingKey)
-        )
-    };
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(signingKey)
+            )
+        };
 });
 ///users
 
@@ -115,6 +112,10 @@ builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 builder.Services.AddScoped<IImplementosRepository, ImplementoRepository>();
 builder.Services.AddScoped<IReservaAreaRepository, ReservaAreaRepository>();
 builder.Services.AddScoped<IReservasImplementosRepository, ReservasImplementosRepository>();
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -131,6 +132,13 @@ app.UseCors("AllowAll");
 
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x
+     .AllowAnyMethod()
+     .AllowAnyHeader()
+     .AllowCredentials()
+      //.WithOrigins("https://localhost:44351))
+      .SetIsOriginAllowed(origin => true));
 
 ///Useers
 app.UseAuthentication();
