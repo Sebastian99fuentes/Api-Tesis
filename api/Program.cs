@@ -26,6 +26,22 @@ if (string.IsNullOrEmpty(defaultConnection))
 {
     throw new InvalidOperationException("Default connection string is not set in the environment variables.");
 }
+var Issuer = Environment.GetEnvironmentVariable("Issuer");
+if (string.IsNullOrEmpty(signingKey))
+{
+    throw new InvalidOperationException("Issuer not set in the environment variables.");
+}
+
+// Verificar también la conexión por si la variable está vacía
+var Audience = Environment.GetEnvironmentVariable("Audience");
+if (string.IsNullOrEmpty(defaultConnection))
+{
+    throw new InvalidOperationException("Audience is not set in the environment variables.");
+}
+
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,9 +111,9 @@ builder.Services.AddAuthentication(Options =>{
     options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidIssuer = Issuer,
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidAudience = Audience,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(signingKey)
@@ -134,11 +150,10 @@ app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
 app.UseCors(x => x
-     .AllowAnyMethod()
-     .AllowAnyHeader()
-     .AllowCredentials()
-      //.WithOrigins("https://localhost:44351))
-      .SetIsOriginAllowed(origin => true));
+.AllowAnyOrigin()  // Permite cualquier origen
+    .AllowAnyMethod()  // Permite cualquier método (GET, POST, etc.)
+    .AllowAnyHeader()  // Permite cualquier encabezado
+    .AllowCredentials());  // Permite el envío de cookies y cabeceras de autenticación
 
 ///Useers
 app.UseAuthentication();

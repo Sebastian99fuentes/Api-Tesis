@@ -21,6 +21,7 @@ namespace api.Services
         {
             _config = config;
               var signingKey = Environment.GetEnvironmentVariable("Signing_Key");
+              
            if (string.IsNullOrEmpty(signingKey))
            {
               throw new InvalidOperationException("JWT signing key is not set.");
@@ -30,6 +31,8 @@ namespace api.Services
 
        public string CreateToken(AppUser user)
        {
+          var Issuer_ = Environment.GetEnvironmentVariable("Issuer");
+          var Audience_ = Environment.GetEnvironmentVariable("Audience");
          var claims = new List<Claim>
           {
           //  new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "defaultEmail@example.com"),
@@ -45,8 +48,8 @@ namespace api.Services
           {
                Subject = new ClaimsIdentity(claims),
                Expires = DateTime.Now.AddDays(7),
-               Issuer = _config["JWT:Issuer"],
-               Audience = _config["JWT:Audience"],
+               Issuer = Issuer_,
+               Audience = Audience_,
                SigningCredentials = creds 
           };
 

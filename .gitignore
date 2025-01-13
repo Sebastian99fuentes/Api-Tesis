@@ -1,0 +1,30 @@
+.env 
+# Archivos de compilación
+bin/
+obj/
+
+# Configuraciones específicas del IDE
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Configuración de publicación local
+appsettings.Development.json
+
+# Archivos temporales de paquete NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Migraciones automáticas (opcional, si las generas localmente)
+Migrations/
+
+# Archivos de logs
+*.log
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
